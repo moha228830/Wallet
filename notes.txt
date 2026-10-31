@@ -1,0 +1,142 @@
+1- استقبال الاموال 
+
+        - يمكن استقبال الاموال من اكثر من بنك 
+        - كل بنك له تنسيق الويب هوك الخاص به 
+        - الاشعار الويب هوك يمكن ان يحوي اكثر من معامله 
+        - يمكن ايقاف معالجه الويب هوك مؤقتا من قبل النظام 
+        - البنك ساعات بيبعت نفس المعامله اكتر من مره
+
+   2- ارسال الاموال 
+
+       - كل البنوك نفس ال XML
+       - الصادر يتسجل عندي و نتابع ردالبنك 
+       -  مش تظهر لو مفيش note
+       - paymentType لو مش 99 بس
+       - chargeDetails لو مش SHA
+
+
+                                ///////////////////////////////////
+                                //    تحليل  اشعار الويب هوك    //
+                                //////////////////////////////////
+
+        PayTech 
+            20250615156,50#202506159000001#note/debt payment march/internal_reference/A462JE81
+
+            date = 20250615   اول 8 
+            amount = 156,50     
+            reference = 202506159000001
+            وبعدين key/value  -->  note , internal_reference
+
+        Acme 
+            156,50//202506159000001//20250615
+            amount // reference // date
+
+
+
+
+                                ///////////////////////////////////
+                                //          الجداول              //
+                                //////////////////////////////////
+
+          clients 
+        1 - id
+        2 - name 
+        3 - account_number  
+        4 - currency   
+        5 - balance  
+        6 - timestamps
+
+
+          banks 
+        1- name 
+        2- code  
+        3- swift_code  
+        4 -date 
+        5 - is_active  
+        
+
+
+          client_bank_references 
+         1 - client_id  
+        2 - bank_id 
+        3- reference  
+        4 - timestamps
+         
+
+
+          webhook_events 
+        1 - bank_id  
+        2 - type    incoming_transactions / transfer_status
+        3 - client_reference  
+        4 - raw_body   longText
+        5 - status   pending / processing / processed / partially_failed / failed
+        6 - attempts   default 0
+        8 - processed_at   nullable
+        9 - timestamps 
+                                  -----   index(status, id)
+
+
+
+          webhook_event_errors
+        - webhook_event_id  FK
+        - error_type    parse_error / client_not_found / exception
+        - message 
+        - created_at
+
+
+          transactions        (الوارد)
+        1 - client_id   
+        2 - bank_id  
+        3 - bank_reference  
+        4 - amount   decimal
+        5 - transaction_date   date
+        6 - metadata   json nullable
+        7 - webhook_event_id   FK nullable
+        8 - timestamps
+        unique(bank_id, bank_reference) ///////// منع التكرار
+        index(client_id, transaction_date)
+
+         
+
+
+          transfers        (الصادر)
+        1 - reference   uuid unique    (Reference في ال XML)
+        2 - client_id   
+        3 - amount   decimal
+        4 - currency
+        5 - receiver_bank_code   
+        6 - receiver_account_number   
+        7 - beneficiary_name
+        8 - notes   json nullable
+        9 - payment_type   default 99
+        10 - charge_details   default SHA
+        11 - status   default pending
+        12 - request_xml   nullable
+        13 - bank_transaction_id   nullable
+        14 - failure_reason   nullable
+        15 - sent_at , completed_at
+        16 - timestamps
+
+        pending > sent > accepted > completed
+       
+
+
+          transfer_status_logs
+        - transfer_id 
+        - from_status  nullable
+        - to_status
+        - source    system / bank_response / bank_webhook / reconciliation
+        - body    nullable
+        - created_at
+
+
+          user_transactions 
+        1 - client_id   
+        2 - entry_type    incoming / transfer / transfer_refund
+        3 - source_type , source_id     (transactions او transfers)
+        4 - debit   decimal(14,2)  default 0
+        5 - credit   decimal(14,2)  default 0
+        6 - balance_after   decimal(14,2)
+        7 - description   nullable
+        8 - created_at
+       
