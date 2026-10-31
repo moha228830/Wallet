@@ -35,7 +35,7 @@ class PaymentXmlGenerator
         $root->appendChild($receiverInfo);
 
         $cleanNotes = array_values(array_filter(array_map('trim', $instruction->notes)));
-        if (!empty($cleanNotes)) {
+        if (! empty($cleanNotes)) {
             $notesElement = $doc->createElement('Notes');
             foreach ($cleanNotes as $note) {
                 $this->appendElement($doc, $notesElement, 'Note', $note);

@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class ProcessPendingWebhooksCommand extends Command
 {
     protected $signature = 'webhooks:process-pending {--limit= : Maximum number of payloads to process}';
+
     protected $description = 'Process queued pending webhook payloads';
 
     public function handle(WebhookIngestionService $service): int

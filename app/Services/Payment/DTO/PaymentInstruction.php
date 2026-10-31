@@ -5,7 +5,7 @@ namespace App\Services\Payment\DTO;
 readonly class PaymentInstruction
 {
     /**
-     * @param array<string> $notes
+     * @param  array<string>  $notes
      */
     public function __construct(
         public string $reference,

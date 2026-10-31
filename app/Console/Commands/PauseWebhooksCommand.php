@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class PauseWebhooksCommand extends Command
 {
     protected $signature = 'webhooks:pause';
+
     protected $description = 'Pause webhook ingestion processing without dropping incoming webhooks';
 
     public function handle(WebhookIngestionService $service): int

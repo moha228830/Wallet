@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 class ResumeWebhooksCommand extends Command
 {
     protected $signature = 'webhooks:resume {--process : Process pending webhooks immediately after resuming}';
+
     protected $description = 'Resume webhook ingestion processing';
 
     public function handle(WebhookIngestionService $service): int

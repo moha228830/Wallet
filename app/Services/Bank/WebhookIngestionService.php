@@ -42,7 +42,7 @@ class WebhookIngestionService
             'status' => WebhookPayload::STATUS_PENDING,
         ]);
 
-        if (!$this->isPaused()) {
+        if (! $this->isPaused()) {
             $this->processPayload($payload);
         }
 
@@ -138,10 +138,10 @@ class WebhookIngestionService
         }
 
         $fallback = Client::firstOrCreate(
-            ['account_number' => $parsed->clientIdentifier ?? 'ACC-' . substr($parsed->reference, -8)],
+            ['account_number' => $parsed->clientIdentifier ?? 'ACC-'.substr($parsed->reference, -8)],
             [
-                'name' => 'Client ' . ($parsed->clientIdentifier ?? substr($parsed->reference, -8)),
-                'email' => ($parsed->clientIdentifier ?? substr($parsed->reference, -8)) . '@wallet.local',
+                'name' => 'Client '.($parsed->clientIdentifier ?? substr($parsed->reference, -8)),
+                'email' => ($parsed->clientIdentifier ?? substr($parsed->reference, -8)).'@wallet.local',
                 'balance' => 0.00,
             ]
         );

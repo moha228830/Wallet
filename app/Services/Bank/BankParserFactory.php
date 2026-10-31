@@ -21,7 +21,7 @@ class BankParserFactory
     {
         $key = strtolower(trim($bank));
 
-        if (!isset($this->parsers[$key])) {
+        if (! isset($this->parsers[$key])) {
             throw new InvalidArgumentException("Unsupported bank parser: [{$bank}]");
         }
 

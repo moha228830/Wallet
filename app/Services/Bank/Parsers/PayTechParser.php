@@ -24,7 +24,7 @@ class PayTechParser extends AbstractBankParser
         $reference = trim($parts[1]);
         $metadataSegment = trim($parts[2]);
 
-        if (!preg_match('/^(\d{8})[\s,]*(.+)$/', $firstSegment, $matches)) {
+        if (! preg_match('/^(\d{8})[\s,]*(.+)$/', $firstSegment, $matches)) {
             throw new InvalidArgumentException("Unable to extract date and amount from PayTech line: {$firstSegment}");
         }
 
@@ -53,7 +53,7 @@ class PayTechParser extends AbstractBankParser
             reference: $reference,
             amount: $amount,
             date: $date,
-            metadata: !empty($metadata) ? $metadata : null,
+            metadata: ! empty($metadata) ? $metadata : null,
             clientIdentifier: $clientHint,
         );
     }

@@ -13,7 +13,7 @@ class ClientFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'account_number' => 'SA' . fake()->numerify('######################'),
+            'account_number' => 'SA'.fake()->numerify('######################'),
             'email' => fake()->unique()->safeEmail(),
             'balance' => 0.00,
         ];

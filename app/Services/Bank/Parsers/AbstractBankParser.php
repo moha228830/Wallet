@@ -32,7 +32,7 @@ abstract class AbstractBankParser implements BankParserInterface
         $cleaned = trim(str_replace([' ', "\t"], '', $value));
         $normalized = str_replace(',', '.', $cleaned);
 
-        if (!is_numeric($normalized)) {
+        if (! is_numeric($normalized)) {
             throw new InvalidArgumentException("Invalid transaction amount: {$value}");
         }
 
